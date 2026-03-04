@@ -5,12 +5,21 @@ export const Media: CollectionConfig = {
   access: {
     read: () => true,
   },
+  upload: {
+    mimeTypes: ['image/*', 'application/pdf'],
+  },
+  admin: {
+    useAsTitle: 'alt',
+  },
   fields: [
     {
       name: 'alt',
       type: 'text',
       required: true,
     },
+    {
+      name: 'caption',
+      type: 'text',
+    },
   ],
-  upload: true,
 }
