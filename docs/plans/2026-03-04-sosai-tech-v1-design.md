@@ -8,7 +8,7 @@ Business website for Sosai Technologies LLC — a consulting sales engine, techn
 
 | Layer | Tool | Cost |
 |-------|------|------|
-| Framework | Next.js 16.2.x (App Router) + TypeScript | Free |
+| Framework | Next.js 15.4.x (App Router) + TypeScript | Free |
 | CMS | Payload CMS 3.0 | Free (self-hosted) |
 | Styling | Tailwind CSS v4 (site) / v3 (Payload admin, isolated) | Free |
 | Database | Neon PostgreSQL | Free tier |

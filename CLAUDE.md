@@ -8,7 +8,7 @@ Sosai Technologies LLC business website — a consulting sales engine, technical
 
 ## Tech Stack
 
-- **Framework:** Next.js 16.2.x (App Router) + TypeScript
+- **Framework:** Next.js 15.4.x (App Router) + TypeScript
 - **CMS:** Payload CMS 3.0 (installed directly into Next.js)
 - **Styling:** Tailwind CSS v4 for site pages (Payload admin uses its own Tailwind v3, isolated)
 - **Database:** Neon PostgreSQL (via `@payloadcms/db-postgres`)
