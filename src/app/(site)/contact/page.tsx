@@ -1,11 +1,17 @@
-'use client'
-
 import { FadeIn } from '@/components/motion/FadeIn'
 import { ContactForm } from '@/components/forms/ContactForm'
+import { getPayloadClient } from '@/lib/payload'
 
 // ─── Page ───────────────────────────────────────────────────────────────────
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const payload = await getPayloadClient()
+  const settings = await payload.findGlobal({ slug: 'site-settings' })
+
+  const contactEmail = settings.contactEmail || 'hello@sosai.tech'
+  const location = settings.location || 'United States (Remote)'
+  const responseTime = settings.responseTime || 'Within 1 business day'
+
   return (
     <div>
       {/* Header */}
@@ -50,10 +56,10 @@ export default function ContactPage() {
                       Email
                     </p>
                     <a
-                      href="mailto:hello@sosai.tech"
+                      href={`mailto:${contactEmail}`}
                       className="text-sm text-zinc-300 transition-colors hover:text-accent"
                     >
-                      hello@sosai.tech
+                      {contactEmail}
                     </a>
                   </div>
                   <div>
@@ -61,7 +67,7 @@ export default function ContactPage() {
                       Location
                     </p>
                     <p className="text-sm text-zinc-300">
-                      United States (Remote)
+                      {location}
                     </p>
                   </div>
                   <div>
@@ -69,7 +75,7 @@ export default function ContactPage() {
                       Response Time
                     </p>
                     <p className="text-sm text-zinc-300">
-                      Within 1 business day
+                      {responseTime}
                     </p>
                   </div>
                 </div>

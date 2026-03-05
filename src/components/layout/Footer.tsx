@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { getPayloadClient } from '@/lib/payload'
 
 const footerLinks = [
   { label: 'Services', href: '/services' },
@@ -8,12 +9,17 @@ const footerLinks = [
   { label: 'Contact', href: '/contact' },
 ]
 
-const socialLinks = [
-  { label: 'GitHub', href: 'https://github.com/sosai-technologies' },
-  { label: 'LinkedIn', href: 'https://linkedin.com/company/sosai-technologies' },
-]
+export async function Footer() {
+  const payload = await getPayloadClient()
+  const settings = await payload.findGlobal({ slug: 'site-settings' })
 
-export function Footer() {
+  const tagline = settings.tagline || 'Building intelligent software systems for modern organizations.'
+  const socialLinks = [
+    settings.socialLinks?.github && { label: 'GitHub', href: settings.socialLinks.github },
+    settings.socialLinks?.linkedin && { label: 'LinkedIn', href: settings.socialLinks.linkedin },
+    settings.socialLinks?.twitter && { label: 'Twitter', href: settings.socialLinks.twitter },
+  ].filter(Boolean) as { label: string; href: string }[]
+
   return (
     <footer className="border-t border-border">
       <div className="mx-auto max-w-7xl px-6 py-16">
@@ -27,7 +33,7 @@ export function Footer() {
               sosai<span className="text-accent">.</span>tech
             </Link>
             <p className="mt-3 max-w-xs text-sm leading-relaxed text-muted">
-              Building intelligent software systems for modern organizations.
+              {tagline}
             </p>
           </div>
 

@@ -1,47 +1,34 @@
-'use client'
-
 import Link from 'next/link'
 import { FadeIn } from '@/components/motion/FadeIn'
 import { CardDeck } from '@/components/motion/CardDeck'
+import { getPayloadClient } from '@/lib/payload'
 
-// ─── Hardcoded data (replace with Payload API calls later) ──────────────────
-
-const projects = [
-  {
-    id: 1,
-    title: 'CorVia',
-    slug: 'corvia',
-    summary:
-      'Leadership assessment and development SaaS platform enabling organizations to evaluate, track, and grow leadership capabilities across their teams.',
-    techStack: ['React', 'Node.js', 'PostgreSQL', 'Azure', 'TypeScript'],
-    status: 'Shipped',
-    year: '2024',
-  },
-  {
-    id: 2,
-    title: 'Banksy',
-    slug: 'banksy',
-    summary:
-      'Financial software platform providing automated reporting, compliance tracking, and portfolio analytics for small-to-midsize financial services firms.',
-    techStack: ['Next.js', 'Python', 'PostgreSQL', 'AWS', 'Docker'],
-    status: 'Shipped',
-    year: '2024',
-  },
-  {
-    id: 3,
-    title: 'Multi-Tenant CMS',
-    slug: 'multi-tenant-cms',
-    summary:
-      'Payload CMS-based content management platform supporting multiple client sites from a single deployment with isolated content, users, and configurations.',
-    techStack: ['Payload CMS', 'Next.js', 'PostgreSQL', 'TypeScript', 'Tailwind CSS'],
-    status: 'Shipped',
-    year: '2025',
-  },
-]
+function capitalizeFirst(str: string): string {
+  return str.charAt(0).toUpperCase() + str.slice(1)
+}
 
 // ─── Page ───────────────────────────────────────────────────────────────────
 
-export default function WorkPage() {
+export default async function WorkPage() {
+  const payload = await getPayloadClient()
+
+  const { docs: projectsDocs } = await payload.find({
+    collection: 'projects',
+    where: { status: { equals: 'published' } },
+    sort: '-publishedDate',
+    limit: 100,
+  })
+
+  const projects = projectsDocs.map((p) => ({
+    id: p.id,
+    title: p.title,
+    slug: p.slug,
+    summary: p.summary,
+    techStack: (p.techStack ?? []).map((t) => t.technology),
+    status: capitalizeFirst(p.projectStatus || 'shipped'),
+    year: p.year || '',
+  }))
+
   return (
     <div>
       {/* Header */}

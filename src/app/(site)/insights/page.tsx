@@ -1,36 +1,35 @@
-'use client'
-
 import Link from 'next/link'
 import { FadeIn, StaggerContainer, StaggerItem } from '@/components/motion/FadeIn'
-
-// ─── Hardcoded data (replace with Payload API calls later) ──────────────────
-
-const posts = [
-  {
-    id: 1,
-    title: 'Why Systems Integration Matters for Growing Businesses',
-    slug: 'why-systems-integration-matters',
-    excerpt:
-      'Most growing businesses run on a patchwork of disconnected tools. Systems integration eliminates the manual data transfer, reduces errors, and unlocks operational insights that siloed systems can never provide.',
-    tags: ['Systems Integration', 'Automation', 'Operations'],
-    publishedDate: 'January 15, 2025',
-    readTime: '5 min read',
-  },
-  {
-    id: 2,
-    title: 'Cloud Architecture for Small Businesses: What Actually Matters',
-    slug: 'cloud-architecture-for-small-businesses',
-    excerpt:
-      'Small businesses do not need the same cloud architecture as Netflix. Here is what actually matters when designing cloud infrastructure for organizations that need reliability without enterprise complexity.',
-    tags: ['Cloud', 'Architecture', 'Infrastructure'],
-    publishedDate: 'February 1, 2025',
-    readTime: '6 min read',
-  },
-]
+import { getPayloadClient } from '@/lib/payload'
 
 // ─── Page ───────────────────────────────────────────────────────────────────
 
-export default function InsightsPage() {
+export default async function InsightsPage() {
+  const payload = await getPayloadClient()
+
+  const { docs: postsDocs } = await payload.find({
+    collection: 'posts',
+    where: { status: { equals: 'published' } },
+    sort: '-publishedDate',
+    limit: 100,
+  })
+
+  const posts = postsDocs.map((p) => ({
+    id: p.id,
+    title: p.title,
+    slug: p.slug,
+    excerpt: p.excerpt,
+    tags: (p.tags ?? []).map((t) => t.tag),
+    publishedDate: p.publishedDate
+      ? new Date(p.publishedDate).toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        })
+      : '',
+    readTime: p.readTime || '',
+  }))
+
   return (
     <div>
       {/* Header */}

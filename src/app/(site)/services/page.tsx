@@ -1,73 +1,7 @@
-'use client'
-
 import Link from 'next/link'
 import { FadeIn } from '@/components/motion/FadeIn'
 import { CardDeck } from '@/components/motion/CardDeck'
-
-// ─── Hardcoded data (replace with Payload API calls later) ──────────────────
-
-const services = [
-  {
-    id: 1,
-    title: 'Cloud Infrastructure',
-    slug: 'cloud-infrastructure',
-    description:
-      'Azure and AWS architecture design, migration, and management. We build scalable, cost-efficient cloud backends that grow with your business — from initial setup through production hardening.',
-    capabilities: [
-      'Cloud architecture design & review',
-      'Migration planning & execution',
-      'Infrastructure as Code (Terraform, Pulumi)',
-      'Cost optimization & monitoring',
-      'Security hardening & compliance',
-    ],
-    icon: 'cloud',
-  },
-  {
-    id: 2,
-    title: 'Custom Software Systems',
-    slug: 'custom-software-systems',
-    description:
-      'Internal tools, automation platforms, and bespoke applications built to solve your specific operational problems. No templates — every system is engineered from requirements through deployment.',
-    capabilities: [
-      'Requirements analysis & system design',
-      'Full-stack application development',
-      'Database design & optimization',
-      'API development & documentation',
-      'Deployment & CI/CD pipelines',
-    ],
-    icon: 'code',
-  },
-  {
-    id: 3,
-    title: 'Systems Integration',
-    slug: 'systems-integration',
-    description:
-      'API development, data pipelines, and workflow automation connecting your existing tools into a unified system. We eliminate manual data transfer and reduce operational friction.',
-    capabilities: [
-      'API design & development',
-      'Data pipeline architecture',
-      'Workflow automation',
-      'Legacy system modernization',
-      'Real-time data synchronization',
-    ],
-    icon: 'link',
-  },
-  {
-    id: 4,
-    title: 'AI-Assisted Automation',
-    slug: 'ai-assisted-automation',
-    description:
-      'Document processing, workflow analysis, and intelligent automation powered by modern AI. We identify high-impact automation opportunities and build production-ready solutions.',
-    capabilities: [
-      'Document processing & extraction',
-      'Workflow analysis & optimization',
-      'LLM integration & prompt engineering',
-      'Automated reporting systems',
-      'Intelligent data classification',
-    ],
-    icon: 'cpu',
-  },
-]
+import { getPayloadClient } from '@/lib/payload'
 
 // ─── Icon components ────────────────────────────────────────────────────────
 
@@ -106,7 +40,24 @@ function ServiceIcon({ name }: { name: string }) {
 
 // ─── Page ───────────────────────────────────────────────────────────────────
 
-export default function ServicesPage() {
+export default async function ServicesPage() {
+  const payload = await getPayloadClient()
+
+  const { docs: servicesDocs } = await payload.find({
+    collection: 'services',
+    sort: 'order',
+    limit: 100,
+  })
+
+  const services = servicesDocs.map((s) => ({
+    id: s.id,
+    title: s.title,
+    slug: s.slug,
+    description: s.description,
+    capabilities: (s.capabilities ?? []).map((c) => c.capability),
+    icon: s.icon || 'code',
+  }))
+
   return (
     <div>
       {/* Header */}

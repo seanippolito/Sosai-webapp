@@ -1,71 +1,6 @@
-'use client'
-
 import Link from 'next/link'
 import { FadeIn, StaggerContainer, StaggerItem } from '@/components/motion/FadeIn'
-
-// ─── Hardcoded data (replace with Payload API calls later) ──────────────────
-
-const services = [
-  {
-    id: 1,
-    title: 'Cloud Infrastructure',
-    slug: 'cloud-infrastructure',
-    description:
-      'Azure and AWS architecture design, migration, and management. Scalable, cost-efficient cloud backends that grow with your business.',
-    icon: 'cloud',
-  },
-  {
-    id: 2,
-    title: 'Custom Software Systems',
-    slug: 'custom-software-systems',
-    description:
-      'Internal tools, automation platforms, and bespoke applications engineered from requirements through deployment.',
-    icon: 'code',
-  },
-  {
-    id: 3,
-    title: 'Systems Integration',
-    slug: 'systems-integration',
-    description:
-      'API development, data pipelines, and workflow automation connecting your existing tools into a unified system.',
-    icon: 'link',
-  },
-  {
-    id: 4,
-    title: 'AI-Assisted Automation',
-    slug: 'ai-assisted-automation',
-    description:
-      'Document processing, workflow analysis, and intelligent automation powered by modern AI systems.',
-    icon: 'cpu',
-  },
-]
-
-const projects = [
-  {
-    id: 1,
-    title: 'CorVia',
-    slug: 'corvia',
-    summary:
-      'Leadership assessment and development SaaS platform enabling organizations to evaluate and grow leadership capabilities.',
-    techStack: ['React', 'Node.js', 'PostgreSQL', 'Azure'],
-  },
-  {
-    id: 2,
-    title: 'Banksy',
-    slug: 'banksy',
-    summary:
-      'Financial software platform providing automated reporting, compliance tracking, and portfolio analytics.',
-    techStack: ['Next.js', 'Python', 'PostgreSQL', 'AWS'],
-  },
-  {
-    id: 3,
-    title: 'Multi-Tenant CMS',
-    slug: 'multi-tenant-cms',
-    summary:
-      'Payload CMS-based content management platform supporting multiple client sites from a single deployment.',
-    techStack: ['Payload CMS', 'Next.js', 'PostgreSQL', 'TypeScript'],
-  },
-]
+import { getPayloadClient } from '@/lib/payload'
 
 const metrics = [
   { label: 'Years in R&D', value: '2+' },
@@ -111,7 +46,38 @@ function ServiceIcon({ name }: { name: string }) {
 
 // ─── Page ───────────────────────────────────────────────────────────────────
 
-export default function HomePage() {
+export default async function HomePage() {
+  const payload = await getPayloadClient()
+
+  const { docs: servicesDocs } = await payload.find({
+    collection: 'services',
+    sort: 'order',
+    limit: 4,
+  })
+
+  const { docs: projectsDocs } = await payload.find({
+    collection: 'projects',
+    where: { status: { equals: 'published' } },
+    sort: '-publishedDate',
+    limit: 3,
+  })
+
+  const services = servicesDocs.map((s) => ({
+    id: s.id,
+    title: s.title,
+    slug: s.slug,
+    description: s.description,
+    icon: s.icon || 'code',
+  }))
+
+  const projects = projectsDocs.map((p) => ({
+    id: p.id,
+    title: p.title,
+    slug: p.slug,
+    summary: p.summary,
+    techStack: (p.techStack ?? []).map((t) => t.technology),
+  }))
+
   return (
     <div>
       {/* Hero */}

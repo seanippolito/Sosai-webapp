@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
+import { SeedButton } from '@/components/dev/SeedButton'
 import './styles.css'
 
 export default function SiteLayout({ children }: { children: ReactNode }) {
@@ -11,6 +12,7 @@ export default function SiteLayout({ children }: { children: ReactNode }) {
           <Header />
           <main className="flex-1 pt-[65px]">{children}</main>
           <Footer />
+          <SeedButton />
         </div>
       </body>
     </html>
