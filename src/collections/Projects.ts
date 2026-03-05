@@ -46,6 +46,28 @@ export const Projects: CollectionConfig = {
       ],
     },
     {
+      name: 'year',
+      type: 'text',
+      admin: {
+        position: 'sidebar',
+        description: 'Display year (e.g. "2024")',
+      },
+    },
+    {
+      name: 'projectStatus',
+      type: 'select',
+      options: [
+        { label: 'In Progress', value: 'in-progress' },
+        { label: 'Shipped', value: 'shipped' },
+        { label: 'Archived', value: 'archived' },
+      ],
+      defaultValue: 'in-progress',
+      admin: {
+        position: 'sidebar',
+        description: 'Visitor-facing project status',
+      },
+    },
+    {
       name: 'problem',
       type: 'textarea',
       admin: {

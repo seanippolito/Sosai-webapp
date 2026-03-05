@@ -34,6 +34,20 @@ export const Services: CollectionConfig = {
       },
     },
     {
+      name: 'capabilities',
+      type: 'array',
+      fields: [
+        {
+          name: 'capability',
+          type: 'text',
+          required: true,
+        },
+      ],
+      admin: {
+        description: 'List of specific capabilities under this service',
+      },
+    },
+    {
       name: 'order',
       type: 'number',
       defaultValue: 0,

@@ -52,6 +52,14 @@ export const Posts: CollectionConfig = {
       ],
     },
     {
+      name: 'readTime',
+      type: 'text',
+      admin: {
+        position: 'sidebar',
+        description: 'e.g. "5 min read"',
+      },
+    },
+    {
       name: 'status',
       type: 'select',
       defaultValue: 'draft',

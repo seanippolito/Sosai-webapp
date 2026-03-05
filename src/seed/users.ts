@@ -8,6 +8,7 @@ export async function seedUsers(payload: Payload) {
     data: {
       email: 'admin@sosai.tech',
       password: 'admin123',
+      name: 'Sean Irving',
       role: 'admin',
     },
   })

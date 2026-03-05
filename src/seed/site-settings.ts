@@ -7,6 +7,9 @@ export async function seedSiteSettings(payload: Payload) {
       companyName: 'Sosai Technologies',
       tagline:
         'Building intelligent software systems for modern organizations.',
+      contactEmail: 'hello@sosai.tech',
+      location: 'United States (Remote)',
+      responseTime: 'Within 1 business day',
       socialLinks: {
         github: 'https://github.com/sosai-technologies',
         linkedin: 'https://linkedin.com/company/sosai-technologies',

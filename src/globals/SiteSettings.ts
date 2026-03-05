@@ -14,6 +14,21 @@ export const SiteSettings: GlobalConfig = {
       defaultValue: 'Building intelligent software systems for modern organizations.',
     },
     {
+      name: 'contactEmail',
+      type: 'text',
+      defaultValue: 'hello@sosai.tech',
+    },
+    {
+      name: 'location',
+      type: 'text',
+      defaultValue: 'United States (Remote)',
+    },
+    {
+      name: 'responseTime',
+      type: 'text',
+      defaultValue: 'Within 1 business day',
+    },
+    {
       name: 'socialLinks',
       type: 'group',
       fields: [

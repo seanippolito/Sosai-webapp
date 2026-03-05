@@ -44,6 +44,8 @@ const projects = [
       'Multi-tenant SaaS architecture on Azure with a React SPA frontend, Node.js API layer, and PostgreSQL database. Real-time features powered by WebSockets. Assessment engine handles complex scoring algorithms and report generation.',
     outcome:
       'Deployed to production serving multiple enterprise clients. Reduced assessment cycle time from weeks to days and provided leadership teams with data-driven development insights.',
+    year: '2024',
+    projectStatus: 'shipped' as const,
     status: 'published' as const,
     publishedDate: '2024-06-15',
   },
@@ -70,6 +72,8 @@ const projects = [
       'Microservices architecture on AWS with a Next.js frontend, Python analytics engine, and PostgreSQL. Data pipelines handle real-time market data ingestion and report generation. Containerized with Docker for consistent deployment.',
     outcome:
       'Reduced compliance reporting time by 80% for client firms and provided portfolio analytics capabilities that were previously only available to large institutions.',
+    year: '2024',
+    projectStatus: 'shipped' as const,
     status: 'published' as const,
     publishedDate: '2024-09-20',
   },
@@ -96,6 +100,8 @@ const projects = [
       'Single Payload CMS deployment with tenant-aware access control and content isolation. Next.js App Router for the frontend with dynamic tenant resolution. PostgreSQL with row-level security patterns for data isolation.',
     outcome:
       'Successfully deployed serving multiple client organizations from a single infrastructure, reducing hosting costs by 60% compared to individual deployments.',
+    year: '2025',
+    projectStatus: 'shipped' as const,
     status: 'published' as const,
     publishedDate: '2025-01-10',
   },

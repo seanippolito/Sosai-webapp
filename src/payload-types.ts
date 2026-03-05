@@ -135,6 +135,7 @@ export interface UserAuthOperations {
  */
 export interface User {
   id: number;
+  name: string;
   role: 'admin' | 'editor';
   updatedAt: string;
   createdAt: string;
@@ -188,6 +189,15 @@ export interface Service {
    * Icon name or SVG identifier
    */
   icon?: string | null;
+  /**
+   * List of specific capabilities under this service
+   */
+  capabilities?:
+    | {
+        capability: string;
+        id?: string | null;
+      }[]
+    | null;
   order?: number | null;
   updatedAt: string;
   createdAt: string;
@@ -223,6 +233,14 @@ export interface Project {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Display year (e.g. "2024")
+   */
+  year?: string | null;
+  /**
+   * Visitor-facing project status
+   */
+  projectStatus?: ('in-progress' | 'shipped' | 'archived') | null;
   /**
    * What problem did this project solve?
    */
@@ -280,6 +298,10 @@ export interface Post {
         id?: string | null;
       }[]
     | null;
+  /**
+   * e.g. "5 min read"
+   */
+  readTime?: string | null;
   status: 'draft' | 'published';
   publishedDate?: string | null;
   meta?: {
@@ -405,6 +427,7 @@ export interface PayloadMigration {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  name?: T;
   role?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -451,6 +474,12 @@ export interface ServicesSelect<T extends boolean = true> {
   slug?: T;
   description?: T;
   icon?: T;
+  capabilities?:
+    | T
+    | {
+        capability?: T;
+        id?: T;
+      };
   order?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -471,6 +500,8 @@ export interface ProjectsSelect<T extends boolean = true> {
         technology?: T;
         id?: T;
       };
+  year?: T;
+  projectStatus?: T;
   problem?: T;
   architecture?: T;
   outcome?: T;
@@ -503,6 +534,7 @@ export interface PostsSelect<T extends boolean = true> {
         tag?: T;
         id?: T;
       };
+  readTime?: T;
   status?: T;
   publishedDate?: T;
   meta?:
@@ -576,6 +608,9 @@ export interface SiteSetting {
   id: number;
   companyName?: string | null;
   tagline?: string | null;
+  contactEmail?: string | null;
+  location?: string | null;
+  responseTime?: string | null;
   socialLinks?: {
     github?: string | null;
     linkedin?: string | null;
@@ -591,6 +626,9 @@ export interface SiteSetting {
 export interface SiteSettingsSelect<T extends boolean = true> {
   companyName?: T;
   tagline?: T;
+  contactEmail?: T;
+  location?: T;
+  responseTime?: T;
   socialLinks?:
     | T
     | {
