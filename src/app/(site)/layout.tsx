@@ -7,9 +7,9 @@ export default function SiteLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <body>
-        <div className="flex min-h-screen flex-col bg-primary text-white">
+        <div className="relative flex min-h-screen flex-col bg-primary text-white antialiased">
           <Header />
-          <main className="flex-1">{children}</main>
+          <main className="flex-1 pt-[65px]">{children}</main>
           <Footer />
         </div>
       </body>
