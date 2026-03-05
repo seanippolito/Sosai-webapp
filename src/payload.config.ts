@@ -5,12 +5,15 @@ import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 
+import { seoPlugin } from '@payloadcms/plugin-seo'
+
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Services } from './collections/Services'
 import { Projects } from './collections/Projects'
 import { Posts } from './collections/Posts'
 import { Leads } from './collections/Leads'
+import { SiteSettings } from './globals/SiteSettings'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -23,6 +26,7 @@ export default buildConfig({
     },
   },
   collections: [Users, Media, Services, Projects, Posts, Leads],
+  globals: [SiteSettings],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
@@ -34,5 +38,12 @@ export default buildConfig({
     },
   }),
   sharp,
-  plugins: [],
+  plugins: [
+    seoPlugin({
+      collections: ['projects', 'posts'],
+      uploadsCollection: 'media',
+      generateTitle: ({ doc }) => `Sosai Technologies — ${doc.title}`,
+      generateDescription: ({ doc }) => doc.excerpt || doc.summary || '',
+    }),
+  ],
 })
