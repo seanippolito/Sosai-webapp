@@ -10,15 +10,21 @@ const footerLinks = [
 ]
 
 export async function Footer() {
-  const payload = await getPayloadClient()
-  const settings = await payload.findGlobal({ slug: 'site-settings' })
+  let tagline = 'Building intelligent software systems for modern organizations.'
+  let socialLinks: { label: string; href: string }[] = []
 
-  const tagline = settings.tagline || 'Building intelligent software systems for modern organizations.'
-  const socialLinks = [
-    settings.socialLinks?.github && { label: 'GitHub', href: settings.socialLinks.github },
-    settings.socialLinks?.linkedin && { label: 'LinkedIn', href: settings.socialLinks.linkedin },
-    settings.socialLinks?.twitter && { label: 'Twitter', href: settings.socialLinks.twitter },
-  ].filter(Boolean) as { label: string; href: string }[]
+  try {
+    const payload = await getPayloadClient()
+    const settings = await payload.findGlobal({ slug: 'site-settings' })
+    tagline = settings.tagline || tagline
+    socialLinks = [
+      settings.socialLinks?.github && { label: 'GitHub', href: settings.socialLinks.github },
+      settings.socialLinks?.linkedin && { label: 'LinkedIn', href: settings.socialLinks.linkedin },
+      settings.socialLinks?.twitter && { label: 'Twitter', href: settings.socialLinks.twitter },
+    ].filter(Boolean) as { label: string; href: string }[]
+  } catch {
+    // DB unavailable at build time — use defaults
+  }
 
   return (
     <footer className="border-t border-border">

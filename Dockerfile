@@ -32,7 +32,7 @@ ENV S3_REGION=${S3_REGION}
 ENV S3_ENDPOINT=${S3_ENDPOINT}
 
 ENV NODE_OPTIONS="--max-old-space-size=1536"
-RUN pnpm build
+RUN mkdir -p public && pnpm build
 
 # --- Production ---
 FROM node:20-alpine AS runner
