@@ -53,7 +53,7 @@ export async function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-zinc-500 transition-colors hover:text-white"
+                    className="text-sm text-zinc-400 transition-colors hover:text-white"
                   >
                     {link.label}
                   </Link>
@@ -74,10 +74,10 @@ export async function Footer() {
                     href={link.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm text-zinc-500 transition-colors hover:text-white"
+                    className="text-sm text-zinc-400 transition-colors hover:text-white"
                   >
                     {link.label}
-                    <span className="ml-1 text-zinc-700">&#8599;</span>
+                    <span className="ml-1 text-zinc-500">&#8599;</span>
                   </a>
                 </li>
               ))}
@@ -87,12 +87,12 @@ export async function Footer() {
 
         {/* Bottom bar */}
         <div className="mt-16 flex items-center justify-between border-t border-border pt-8">
-          <p className="font-mono text-xs text-zinc-600">
+          <p className="font-mono text-xs text-zinc-500">
             &copy; {new Date().getFullYear()} Sosai Technologies LLC
           </p>
           <div className="flex items-center gap-2">
             <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse-dot" />
-            <span className="font-mono text-xs text-zinc-600">
+            <span className="font-mono text-xs text-zinc-500">
               All systems operational
             </span>
           </div>

@@ -54,7 +54,7 @@ export function Navigation() {
               className={`relative text-sm tracking-wide transition-colors ${
                 isActive
                   ? 'text-white'
-                  : 'text-zinc-500 hover:text-zinc-300'
+                  : 'text-zinc-400 hover:text-zinc-300'
               }`}
             >
               {item.label}

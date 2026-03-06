@@ -1,11 +1,14 @@
-'use client'
-
 import { FadeIn, StaggerContainer, StaggerItem } from '@/components/motion/FadeIn'
 import { PageHeader } from '@/components/ui/PageHeader'
 import { SectionHeader } from '@/components/ui/SectionHeader'
 import { Card } from '@/components/ui/Card'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
+
+export const metadata = {
+  title: 'About',
+  description: 'Sosai Technologies is a software engineering consultancy founded by Sean Irving, building production-grade systems for organizations that cannot afford to get it wrong.',
+}
 
 const values = [
   {

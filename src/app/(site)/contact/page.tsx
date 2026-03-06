@@ -4,6 +4,11 @@ import { PageHeader } from '@/components/ui/PageHeader'
 import { Card } from '@/components/ui/Card'
 import { getPayloadClient } from '@/lib/payload'
 
+export const metadata = {
+  title: 'Contact',
+  description: 'Get in touch with Sosai Technologies to discuss your next project.',
+}
+
 export const revalidate = 60
 
 export default async function ContactPage() {

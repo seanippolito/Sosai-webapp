@@ -4,6 +4,11 @@ import { PageHeader } from '@/components/ui/PageHeader'
 import { Button } from '@/components/ui/Button'
 import { getPayloadClient } from '@/lib/payload'
 
+export const metadata = {
+  title: 'Services',
+  description: 'Cloud architecture, AI integration, systems engineering, and technical consulting for modern organizations.',
+}
+
 export const revalidate = 60
 
 function ServiceIcon({ name }: { name: string }) {

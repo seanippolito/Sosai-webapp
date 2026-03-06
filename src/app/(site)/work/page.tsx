@@ -6,6 +6,11 @@ import { Badge } from '@/components/ui/Badge'
 import { getPayloadClient } from '@/lib/payload'
 import type { Media } from '@/payload-types'
 
+export const metadata = {
+  title: 'Work',
+  description: 'Selected projects and case studies from Sosai Technologies.',
+}
+
 export const revalidate = 60
 
 function capitalizeFirst(str: string): string {

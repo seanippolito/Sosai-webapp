@@ -11,6 +11,20 @@ import type { User, Media } from '@/payload-types'
 
 export const dynamic = 'force-dynamic'
 
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  const payload = await getPayloadClient()
+  const { docs } = await payload.find({
+    collection: 'posts',
+    where: { slug: { equals: slug }, status: { equals: 'published' } },
+    limit: 1,
+    select: { title: true, excerpt: true },
+  })
+  const post = docs[0]
+  if (!post) return { title: 'Post Not Found' }
+  return { title: post.title, description: post.excerpt }
+}
+
 export default async function PostPage({
   params,
 }: {

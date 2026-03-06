@@ -11,6 +11,20 @@ import type { Media } from '@/payload-types'
 
 export const dynamic = 'force-dynamic'
 
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  const payload = await getPayloadClient()
+  const { docs } = await payload.find({
+    collection: 'projects',
+    where: { slug: { equals: slug }, status: { equals: 'published' } },
+    limit: 1,
+    select: { title: true, summary: true },
+  })
+  const project = docs[0]
+  if (!project) return { title: 'Project Not Found' }
+  return { title: project.title, description: project.summary }
+}
+
 function capitalizeFirst(str: string): string {
   return str.charAt(0).toUpperCase() + str.slice(1)
 }

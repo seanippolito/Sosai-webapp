@@ -6,6 +6,11 @@ import { Badge } from '@/components/ui/Badge'
 import { getPayloadClient } from '@/lib/payload'
 import type { Media } from '@/payload-types'
 
+export const metadata = {
+  title: 'Insights',
+  description: 'Technical articles, engineering perspectives, and industry analysis from Sosai Technologies.',
+}
+
 export const revalidate = 60
 
 export default async function InsightsPage() {
