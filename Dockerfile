@@ -31,6 +31,7 @@ ENV S3_SECRET_ACCESS_KEY=${S3_SECRET_ACCESS_KEY}
 ENV S3_REGION=${S3_REGION}
 ENV S3_ENDPOINT=${S3_ENDPOINT}
 
+ENV NODE_OPTIONS="--max-old-space-size=1536"
 RUN pnpm build
 
 # --- Production ---
