@@ -9,18 +9,7 @@ import { getPayloadClient } from '@/lib/payload'
 import { RichText } from '@payloadcms/richtext-lexical/react'
 import type { Media } from '@/payload-types'
 
-export const revalidate = 60
-
-export async function generateStaticParams() {
-  const payload = await getPayloadClient()
-  const { docs } = await payload.find({
-    collection: 'projects',
-    where: { status: { equals: 'published' } },
-    limit: 100,
-    select: { slug: true },
-  })
-  return docs.map((doc) => ({ slug: doc.slug }))
-}
+export const dynamic = 'force-dynamic'
 
 function capitalizeFirst(str: string): string {
   return str.charAt(0).toUpperCase() + str.slice(1)

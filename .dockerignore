@@ -1,0 +1,13 @@
+node_modules
+.next
+.git
+.env
+.env.*
+*.md
+docs
+.claude
+.playwright-mcp
+playwright-report
+test-results
+*.png
+*.jpg

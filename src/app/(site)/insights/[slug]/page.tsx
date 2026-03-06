@@ -9,18 +9,7 @@ import { getPayloadClient } from '@/lib/payload'
 import { RichText } from '@payloadcms/richtext-lexical/react'
 import type { User, Media } from '@/payload-types'
 
-export const revalidate = 60
-
-export async function generateStaticParams() {
-  const payload = await getPayloadClient()
-  const { docs } = await payload.find({
-    collection: 'posts',
-    where: { status: { equals: 'published' } },
-    limit: 100,
-    select: { slug: true },
-  })
-  return docs.map((doc) => ({ slug: doc.slug }))
-}
+export const dynamic = 'force-dynamic'
 
 export default async function PostPage({
   params,
