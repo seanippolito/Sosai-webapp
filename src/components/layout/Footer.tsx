@@ -87,12 +87,12 @@ export async function Footer() {
 
         {/* Bottom bar */}
         <div className="mt-16 flex items-center justify-between border-t border-border pt-8">
-          <p className="font-mono text-xs text-zinc-500">
+          <p className="font-mono text-xs text-zinc-400">
             &copy; {new Date().getFullYear()} Sosai Technologies LLC
           </p>
           <div className="flex items-center gap-2">
             <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse-dot" />
-            <span className="font-mono text-xs text-zinc-500">
+            <span className="font-mono text-xs text-zinc-400">
               All systems operational
             </span>
           </div>
