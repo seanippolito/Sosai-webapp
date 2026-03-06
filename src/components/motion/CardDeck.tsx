@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, type ReactNode, Children } from 'react'
+import { useRef, useState, useEffect, type ReactNode, Children } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 
 interface CardDeckProps {
@@ -14,11 +14,31 @@ interface CardDeckProps {
  * each card drops down to its natural position in a vertical list —
  * like rungs of a rope ladder falling into place. Thin string lines
  * connect the cards. The drop happens quickly (tight scroll runway).
+ *
+ * On mobile (<768px), renders a simple stacked list instead.
  */
 export function CardDeck({ children, className }: CardDeckProps) {
   const items = Children.toArray(children)
   const containerRef = useRef<HTMLDivElement>(null)
   const count = items.length
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768)
+    check()
+    window.addEventListener('resize', check)
+    return () => window.removeEventListener('resize', check)
+  }, [])
+
+  if (isMobile) {
+    return (
+      <div className={`flex flex-col gap-6 ${className ?? ''}`}>
+        {items.map((child, index) => (
+          <div key={index}>{child}</div>
+        ))}
+      </div>
+    )
+  }
 
   return (
     <div

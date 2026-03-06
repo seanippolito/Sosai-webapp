@@ -48,6 +48,11 @@ const projects = [
     projectStatus: 'shipped' as const,
     status: 'published' as const,
     publishedDate: '2024-06-15',
+    meta: {
+      title: 'Sosai Technologies — CorVia',
+      description:
+        'A leadership assessment and development SaaS platform that enables organizations to evaluate, track, and grow leadership capabilities across their teams.',
+    },
   },
   {
     title: 'Banksy',
@@ -76,6 +81,11 @@ const projects = [
     projectStatus: 'shipped' as const,
     status: 'published' as const,
     publishedDate: '2024-09-20',
+    meta: {
+      title: 'Sosai Technologies — Banksy',
+      description:
+        'A financial software platform providing automated reporting, compliance tracking, and portfolio analytics for small-to-midsize financial services firms.',
+    },
   },
   {
     title: 'Multi-Tenant CMS Platform',
@@ -104,6 +114,11 @@ const projects = [
     projectStatus: 'shipped' as const,
     status: 'published' as const,
     publishedDate: '2025-01-10',
+    meta: {
+      title: 'Sosai Technologies — Multi-Tenant CMS Platform',
+      description:
+        'A Payload CMS-based content management platform supporting multiple client sites from a single deployment with isolated content, users, and configurations.',
+    },
   },
 ]
 

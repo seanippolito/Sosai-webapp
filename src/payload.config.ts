@@ -26,6 +26,9 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    components: {
+      afterNavLinks: ['@/components/admin/ViewSiteLink#ViewSiteLink'],
+    },
   },
   collections: [Users, Media, Services, Projects, Posts, Leads],
   globals: [SiteSettings],

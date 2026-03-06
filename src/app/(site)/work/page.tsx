@@ -1,13 +1,16 @@
 import Link from 'next/link'
-import { FadeIn } from '@/components/motion/FadeIn'
-import { CardDeck } from '@/components/motion/CardDeck'
+import Image from 'next/image'
+import { FadeIn, StaggerContainer, StaggerItem } from '@/components/motion/FadeIn'
+import { PageHeader } from '@/components/ui/PageHeader'
+import { Badge } from '@/components/ui/Badge'
 import { getPayloadClient } from '@/lib/payload'
+import type { Media } from '@/payload-types'
+
+export const revalidate = 60
 
 function capitalizeFirst(str: string): string {
   return str.charAt(0).toUpperCase() + str.slice(1)
 }
-
-// ─── Page ───────────────────────────────────────────────────────────────────
 
 export default async function WorkPage() {
   const payload = await getPayloadClient()
@@ -16,96 +19,86 @@ export default async function WorkPage() {
     collection: 'projects',
     where: { status: { equals: 'published' } },
     sort: '-publishedDate',
+    depth: 1,
     limit: 100,
   })
 
-  const projects = projectsDocs.map((p) => ({
-    id: p.id,
-    title: p.title,
-    slug: p.slug,
-    summary: p.summary,
-    techStack: (p.techStack ?? []).map((t) => t.technology),
-    status: capitalizeFirst(p.projectStatus || 'shipped'),
-    year: p.year || '',
-  }))
+  const projects = projectsDocs.map((p) => {
+    const image = typeof p.coverImage === 'object' && p.coverImage !== null ? (p.coverImage as Media) : null
+    return {
+      id: p.id,
+      title: p.title,
+      slug: p.slug,
+      summary: p.summary,
+      techStack: (p.techStack ?? []).map((t) => t.technology),
+      status: capitalizeFirst(p.projectStatus || 'shipped'),
+      year: p.year || '',
+      coverImage: image,
+    }
+  })
 
   return (
     <div>
-      {/* Header */}
-      <section className="border-b border-border">
-        <div className="mx-auto max-w-7xl px-6 pb-16 pt-20">
-          <FadeIn>
-            <p className="mb-3 font-mono text-xs uppercase tracking-widest text-accent">
-              Portfolio
-            </p>
-          </FadeIn>
-          <FadeIn delay={0.1}>
-            <h1 className="max-w-3xl text-4xl font-bold tracking-tight md:text-5xl">
-              Systems we have designed, built, and shipped
-            </h1>
-          </FadeIn>
-          <FadeIn delay={0.2}>
-            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-zinc-400">
-              Every project here went from requirements to production. We build
-              systems that organizations depend on — not demos or prototypes.
-            </p>
-          </FadeIn>
-        </div>
-      </section>
+      <PageHeader
+        label="Portfolio"
+        title="Systems we have designed, built, and shipped"
+        description="Every project here went from requirements to production. We build systems that organizations depend on — not demos or prototypes."
+      />
 
-      {/* Projects */}
-      <section className="mx-auto max-w-7xl px-6 pt-24">
-        <CardDeck>
+      <section className="mx-auto max-w-7xl px-6 py-24">
+        <StaggerContainer className="flex flex-col gap-6">
           {projects.map((project, index) => (
-            <Link
-              key={project.id}
-              href={`/work/${project.slug}`}
-              className="group block rounded-lg border border-border bg-primary p-8 transition-all hover:border-border-hover hover:bg-surface/60 md:p-10"
-            >
-              <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
-                <div className="flex-1">
-                  <div className="mb-1 flex items-center gap-3">
-                    <span className="font-mono text-xs text-zinc-600">
-                      0{index + 1}
-                    </span>
-                    <span className="font-mono text-xs text-zinc-700">/</span>
-                    <span className="font-mono text-xs text-zinc-600">
-                      {project.year}
-                    </span>
+            <StaggerItem key={project.id}>
+              <Link
+                href={`/work/${project.slug}`}
+                className="group grid overflow-hidden rounded-lg border border-border bg-primary transition-all hover:border-border-hover hover:bg-surface/60 md:grid-cols-5"
+              >
+                {project.coverImage?.url && (
+                  <div className="relative aspect-[16/10] bg-surface md:col-span-2 md:aspect-auto">
+                    <Image
+                      src={project.coverImage.url}
+                      alt={project.coverImage.alt || project.title}
+                      width={project.coverImage.width || 800}
+                      height={project.coverImage.height || 500}
+                      className="h-full w-full object-cover"
+                    />
                   </div>
-                  <h2 className="mb-3 text-2xl font-bold tracking-tight transition-colors group-hover:text-accent md:text-3xl">
-                    {project.title}
-                  </h2>
-                  <p className="max-w-2xl leading-relaxed text-zinc-400">
-                    {project.summary}
-                  </p>
-                </div>
-
-                <div className="flex flex-col items-start gap-4 md:items-end">
-                  <span className="inline-flex items-center gap-2 rounded-full border border-border px-3 py-1 font-mono text-xs text-zinc-500">
-                    <span className="h-1.5 w-1.5 rounded-full bg-accent" />
-                    {project.status}
-                  </span>
-                  <div className="flex flex-wrap gap-2 md:justify-end">
-                    {project.techStack.map((tech) => (
-                      <span
-                        key={tech}
-                        className="rounded-full border border-border px-3 py-1 font-mono text-xs text-zinc-600"
-                      >
-                        {tech}
+                )}
+                <div className={`flex flex-col justify-between p-5 md:p-8 ${project.coverImage?.url ? 'md:col-span-3' : 'md:col-span-5'}`}>
+                  <div>
+                    <div className="mb-2 flex items-center gap-3">
+                      <span className="font-mono text-xs text-zinc-600">
+                        {String(index + 1).padStart(2, '0')}
                       </span>
-                    ))}
+                      <span className="font-mono text-xs text-zinc-700">/</span>
+                      <span className="font-mono text-xs text-zinc-600">
+                        {project.year}
+                      </span>
+                      <Badge dot className="ml-auto">{project.status}</Badge>
+                    </div>
+                    <h2 className="mb-2 text-xl font-bold tracking-tight transition-colors group-hover:text-accent md:text-2xl">
+                      {project.title}
+                    </h2>
+                    <p className="text-sm leading-relaxed text-zinc-400">
+                      {project.summary}
+                    </p>
+                  </div>
+
+                  <div className="mt-5 flex items-end justify-between gap-4">
+                    <div className="flex flex-wrap gap-1.5">
+                      {project.techStack.map((tech) => (
+                        <Badge key={tech} className="text-zinc-600">{tech}</Badge>
+                      ))}
+                    </div>
+                    <span className="shrink-0 font-mono text-sm text-zinc-600 transition-colors group-hover:text-accent">
+                      View &rarr;
+                    </span>
                   </div>
                 </div>
-              </div>
-
-              <div className="mt-6 flex items-center gap-2 font-mono text-sm text-zinc-600 transition-colors group-hover:text-accent">
-                View case study
-                <span>&rarr;</span>
-              </div>
-            </Link>
+              </Link>
+            </StaggerItem>
           ))}
-        </CardDeck>
+        </StaggerContainer>
       </section>
     </div>
   )

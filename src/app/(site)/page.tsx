@@ -1,6 +1,14 @@
-import Link from 'next/link'
+import Image from 'next/image'
 import { FadeIn, StaggerContainer, StaggerItem } from '@/components/motion/FadeIn'
+import { NetworkGraph } from '@/components/motion/NetworkGraph'
+import { SectionHeader } from '@/components/ui/SectionHeader'
+import { Button } from '@/components/ui/Button'
+import { Badge } from '@/components/ui/Badge'
+import { Card } from '@/components/ui/Card'
 import { getPayloadClient } from '@/lib/payload'
+import type { Media } from '@/payload-types'
+
+export const revalidate = 60
 
 const metrics = [
   { label: 'Years in R&D', value: '2+' },
@@ -8,8 +16,6 @@ const metrics = [
   { label: 'Clearance Level', value: 'Active' },
   { label: 'Uptime SLA', value: '99.9%' },
 ]
-
-// ─── Icon components ────────────────────────────────────────────────────────
 
 function ServiceIcon({ name }: { name: string }) {
   const icons: Record<string, React.ReactNode> = {
@@ -44,8 +50,6 @@ function ServiceIcon({ name }: { name: string }) {
   )
 }
 
-// ─── Page ───────────────────────────────────────────────────────────────────
-
 export default async function HomePage() {
   const payload = await getPayloadClient()
 
@@ -59,6 +63,7 @@ export default async function HomePage() {
     collection: 'projects',
     where: { status: { equals: 'published' } },
     sort: '-publishedDate',
+    depth: 1,
     limit: 3,
   })
 
@@ -70,29 +75,32 @@ export default async function HomePage() {
     icon: s.icon || 'code',
   }))
 
-  const projects = projectsDocs.map((p) => ({
-    id: p.id,
-    title: p.title,
-    slug: p.slug,
-    summary: p.summary,
-    techStack: (p.techStack ?? []).map((t) => t.technology),
-  }))
+  const projects = projectsDocs.map((p) => {
+    const image = typeof p.coverImage === 'object' && p.coverImage !== null ? (p.coverImage as Media) : null
+    return {
+      id: p.id,
+      title: p.title,
+      slug: p.slug,
+      summary: p.summary,
+      techStack: (p.techStack ?? []).map((t) => t.technology),
+      coverImage: image,
+    }
+  })
 
   return (
     <div>
       {/* Hero */}
       <section className="relative overflow-hidden">
         <div className="bg-dot-grid absolute inset-0 opacity-30" />
+        <NetworkGraph />
         <div className="relative mx-auto max-w-7xl px-6 pb-24 pt-32 md:pb-32 md:pt-44">
           <FadeIn>
-            <p className="mb-6 font-mono text-sm tracking-widest text-accent">
-              SOSAI TECHNOLOGIES
-            </p>
+            <p className="section-label mb-6">SOSAI TECHNOLOGIES</p>
           </FadeIn>
           <FadeIn delay={0.1}>
-            <h1 className="max-w-4xl text-5xl font-bold leading-[1.1] tracking-tight md:text-7xl">
+            <h1 className="max-w-4xl text-5xl font-bold leading-[1.08] tracking-tight md:text-8xl">
               We build systems that{' '}
-              <span className="text-gradient">run your operations</span>
+              <span className="text-gradient-strong">run your operations</span>
             </h1>
           </FadeIn>
           <FadeIn delay={0.2}>
@@ -103,19 +111,10 @@ export default async function HomePage() {
           </FadeIn>
           <FadeIn delay={0.3}>
             <div className="mt-10 flex gap-4">
-              <Link
-                href="/work"
-                className="inline-flex items-center gap-2 rounded-md bg-accent px-6 py-3 font-mono text-sm font-medium text-primary transition-all hover:bg-accent/90 hover:shadow-lg hover:shadow-accent/20"
-              >
-                See Our Work
-                <span className="text-lg">&rarr;</span>
-              </Link>
-              <Link
-                href="/contact"
-                className="inline-flex items-center gap-2 rounded-md border border-border px-6 py-3 font-mono text-sm text-zinc-400 transition-all hover:border-zinc-600 hover:text-white"
-              >
+              <Button href="/work">See Our Work</Button>
+              <Button href="/contact" variant="secondary" arrow={false}>
                 Get in Touch
-              </Link>
+              </Button>
             </div>
           </FadeIn>
 
@@ -141,31 +140,19 @@ export default async function HomePage() {
       </section>
 
       {/* Services */}
-      <section className="border-t border-border">
-        <div className="mx-auto max-w-7xl px-6 py-24 md:py-32">
-          <FadeIn>
-            <div className="mb-16 flex items-end justify-between">
-              <div>
-                <p className="mb-3 font-mono text-xs uppercase tracking-widest text-accent">
-                  Capabilities
-                </p>
-                <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
-                  What we build
-                </h2>
-              </div>
-              <Link
-                href="/services"
-                className="hidden font-mono text-sm text-zinc-500 transition-colors hover:text-white md:block"
-              >
-                View all &rarr;
-              </Link>
-            </div>
-          </FadeIn>
+      <section className="relative border-t border-border">
+        <div className="bg-radial-subtle absolute inset-0" />
+        <div className="relative mx-auto max-w-7xl px-6 py-24 md:py-32">
+          <SectionHeader
+            label="Capabilities"
+            title="What we build"
+            link={{ href: '/services', text: 'View all' }}
+          />
 
           <StaggerContainer className="grid gap-4 md:grid-cols-2">
             {services.map((service) => (
               <StaggerItem key={service.id}>
-                <div className="group rounded-lg border border-border bg-surface/50 p-8 transition-all hover:border-border-hover hover:bg-surface">
+                <Card variant="elevated">
                   <div className="mb-5 flex items-center gap-4">
                     <ServiceIcon name={service.icon} />
                     <h3 className="text-lg font-semibold">{service.title}</h3>
@@ -173,7 +160,7 @@ export default async function HomePage() {
                   <p className="leading-relaxed text-zinc-400">
                     {service.description}
                   </p>
-                </div>
+                </Card>
               </StaggerItem>
             ))}
           </StaggerContainer>
@@ -181,51 +168,47 @@ export default async function HomePage() {
       </section>
 
       {/* Selected Work */}
-      <section className="border-t border-border">
-        <div className="mx-auto max-w-7xl px-6 py-24 md:py-32">
-          <FadeIn>
-            <div className="mb-16 flex items-end justify-between">
-              <div>
-                <p className="mb-3 font-mono text-xs uppercase tracking-widest text-accent">
-                  Portfolio
-                </p>
-                <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
-                  Selected work
-                </h2>
-              </div>
-              <Link
-                href="/work"
-                className="hidden font-mono text-sm text-zinc-500 transition-colors hover:text-white md:block"
-              >
-                View all &rarr;
-              </Link>
-            </div>
-          </FadeIn>
+      <section className="relative border-t border-border">
+        <div className="bg-grid-fine absolute inset-0" />
+        <div className="relative mx-auto max-w-7xl px-6 py-24 md:py-32">
+          <SectionHeader
+            label="Portfolio"
+            title="Selected work"
+            link={{ href: '/work', text: 'View all' }}
+          />
 
           <StaggerContainer className="grid gap-4 md:grid-cols-3">
             {projects.map((project) => (
               <StaggerItem key={project.id}>
-                <Link
+                <a
                   href={`/work/${project.slug}`}
-                  className="group flex h-full flex-col rounded-lg border border-border bg-surface/50 p-8 transition-all hover:border-border-hover hover:bg-surface"
+                  className="group flex h-full flex-col overflow-hidden rounded-lg border border-border bg-surface/50 transition-all hover:border-border-hover hover:bg-surface"
                 >
-                  <h3 className="mb-3 text-xl font-bold tracking-tight group-hover:text-accent transition-colors">
-                    {project.title}
-                  </h3>
-                  <p className="mb-6 flex-1 text-sm leading-relaxed text-zinc-400">
-                    {project.summary}
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {project.techStack.map((tech) => (
-                      <span
-                        key={tech}
-                        className="rounded-full border border-border px-3 py-1 font-mono text-xs text-zinc-500"
-                      >
-                        {tech}
-                      </span>
-                    ))}
+                  {project.coverImage?.url && (
+                    <div className="relative aspect-[16/9] w-full bg-surface">
+                      <Image
+                        src={project.coverImage.url}
+                        alt={project.coverImage.alt || project.title}
+                        width={project.coverImage.width || 800}
+                        height={project.coverImage.height || 450}
+                        className="h-full w-full object-cover"
+                      />
+                    </div>
+                  )}
+                  <div className="flex flex-1 flex-col p-8">
+                    <h3 className="mb-3 text-xl font-bold tracking-tight transition-colors group-hover:text-accent">
+                      {project.title}
+                    </h3>
+                    <p className="mb-6 flex-1 text-sm leading-relaxed text-zinc-400">
+                      {project.summary}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {project.techStack.map((tech) => (
+                        <Badge key={tech}>{tech}</Badge>
+                      ))}
+                    </div>
                   </div>
-                </Link>
+                </a>
               </StaggerItem>
             ))}
           </StaggerContainer>
@@ -236,7 +219,7 @@ export default async function HomePage() {
       <section className="border-t border-border">
         <div className="mx-auto max-w-7xl px-6 py-24 md:py-32">
           <FadeIn>
-            <div className="rounded-lg border border-border bg-surface/30 p-12 text-center md:p-20">
+            <Card variant="default" hover={false} padding="lg" className="text-center">
               <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
                 Have a project in mind?
               </h2>
@@ -244,14 +227,10 @@ export default async function HomePage() {
                 We work with teams that need reliable, production-grade systems
                 — not prototypes. Let&apos;s talk about what you&apos;re building.
               </p>
-              <Link
-                href="/contact"
-                className="mt-8 inline-flex items-center gap-2 rounded-md bg-accent px-8 py-3 font-mono text-sm font-medium text-primary transition-all hover:bg-accent/90 hover:shadow-lg hover:shadow-accent/20"
-              >
-                Start a Conversation
-                <span className="text-lg">&rarr;</span>
-              </Link>
-            </div>
+              <div className="mt-8">
+                <Button href="/contact">Start a Conversation</Button>
+              </div>
+            </Card>
           </FadeIn>
         </div>
       </section>

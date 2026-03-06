@@ -1,9 +1,10 @@
-import Link from 'next/link'
 import { FadeIn } from '@/components/motion/FadeIn'
 import { CardDeck } from '@/components/motion/CardDeck'
+import { PageHeader } from '@/components/ui/PageHeader'
+import { Button } from '@/components/ui/Button'
 import { getPayloadClient } from '@/lib/payload'
 
-// ─── Icon components ────────────────────────────────────────────────────────
+export const revalidate = 60
 
 function ServiceIcon({ name }: { name: string }) {
   const icons: Record<string, React.ReactNode> = {
@@ -38,8 +39,6 @@ function ServiceIcon({ name }: { name: string }) {
   )
 }
 
-// ─── Page ───────────────────────────────────────────────────────────────────
-
 export default async function ServicesPage() {
   const payload = await getPayloadClient()
 
@@ -60,30 +59,12 @@ export default async function ServicesPage() {
 
   return (
     <div>
-      {/* Header */}
-      <section className="border-b border-border">
-        <div className="mx-auto max-w-7xl px-6 pb-16 pt-20">
-          <FadeIn>
-            <p className="mb-3 font-mono text-xs uppercase tracking-widest text-accent">
-              What We Do
-            </p>
-          </FadeIn>
-          <FadeIn delay={0.1}>
-            <h1 className="max-w-3xl text-4xl font-bold tracking-tight md:text-5xl">
-              Engineering services for organizations that build to last
-            </h1>
-          </FadeIn>
-          <FadeIn delay={0.2}>
-            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-zinc-400">
-              We focus on four core areas where precision engineering makes
-              the biggest difference. Every engagement starts with understanding
-              your system — not selling you a solution.
-            </p>
-          </FadeIn>
-        </div>
-      </section>
+      <PageHeader
+        label="What We Do"
+        title="Engineering services for organizations that build to last"
+        description="We focus on four core areas where precision engineering makes the biggest difference. Every engagement starts with understanding your system — not selling you a solution."
+      />
 
-      {/* Services list */}
       <section className="mx-auto max-w-7xl px-6 py-16">
         <CardDeck>
           {services.map((service, index) => (
@@ -110,9 +91,7 @@ export default async function ServicesPage() {
                 </div>
 
                 <div className="border-t border-border pt-6 md:border-l md:border-t-0 md:pl-8 md:pt-0">
-                  <p className="mb-4 font-mono text-xs uppercase tracking-widest text-zinc-600">
-                    Capabilities
-                  </p>
+                  <p className="section-label mb-4">Capabilities</p>
                   <ul className="space-y-2">
                     {service.capabilities.map((cap) => (
                       <li
@@ -131,7 +110,6 @@ export default async function ServicesPage() {
         </CardDeck>
       </section>
 
-      {/* CTA */}
       <section className="border-t border-border">
         <div className="mx-auto max-w-7xl px-6 py-24">
           <FadeIn>
@@ -143,13 +121,7 @@ export default async function ServicesPage() {
                 Most projects span multiple areas. Tell us what you are trying to
                 accomplish and we will figure out the right approach together.
               </p>
-              <Link
-                href="/contact"
-                className="inline-flex items-center gap-2 rounded-md bg-accent px-6 py-3 font-mono text-sm font-medium text-primary transition-all hover:bg-accent/90 hover:shadow-lg hover:shadow-accent/20"
-              >
-                Start a Conversation
-                <span className="text-lg">&rarr;</span>
-              </Link>
+              <Button href="/contact">Start a Conversation</Button>
             </div>
           </FadeIn>
         </div>

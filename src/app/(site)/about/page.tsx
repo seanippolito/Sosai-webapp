@@ -1,9 +1,11 @@
 'use client'
 
-import Link from 'next/link'
 import { FadeIn, StaggerContainer, StaggerItem } from '@/components/motion/FadeIn'
-
-// ─── Hardcoded data ─────────────────────────────────────────────────────────
+import { PageHeader } from '@/components/ui/PageHeader'
+import { SectionHeader } from '@/components/ui/SectionHeader'
+import { Card } from '@/components/ui/Card'
+import { Badge } from '@/components/ui/Badge'
+import { Button } from '@/components/ui/Button'
 
 const values = [
   {
@@ -56,43 +58,21 @@ const techAreas = [
   'CI/CD Pipelines',
 ]
 
-// ─── Page ───────────────────────────────────────────────────────────────────
-
 export default function AboutPage() {
   return (
     <div>
-      {/* Header */}
-      <section className="border-b border-border">
-        <div className="mx-auto max-w-7xl px-6 pb-16 pt-20">
-          <FadeIn>
-            <p className="mb-3 font-mono text-xs uppercase tracking-widest text-accent">
-              About
-            </p>
-          </FadeIn>
-          <FadeIn delay={0.1}>
-            <h1 className="max-w-3xl text-4xl font-bold tracking-tight md:text-5xl">
-              An engineering practice built on precision and reliability
-            </h1>
-          </FadeIn>
-          <FadeIn delay={0.2}>
-            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-zinc-400">
-              Sosai Technologies is a software engineering consultancy founded
-              by Sean Irving. We build production-grade systems for
-              organizations that cannot afford to get it wrong.
-            </p>
-          </FadeIn>
-        </div>
-      </section>
+      <PageHeader
+        label="About"
+        title="An engineering practice built on precision and reliability"
+        description="Sosai Technologies is a software engineering consultancy founded by Sean Irving. We build production-grade systems for organizations that cannot afford to get it wrong."
+      />
 
-      {/* Story */}
       <section className="border-b border-border">
         <div className="mx-auto max-w-7xl px-6 py-24">
           <div className="grid gap-16 lg:grid-cols-2">
             <FadeIn>
               <div>
-                <p className="mb-4 font-mono text-xs uppercase tracking-widest text-accent">
-                  Background
-                </p>
+                <p className="section-label mb-4">Background</p>
                 <div className="space-y-6 text-lg leading-relaxed text-zinc-300">
                   <p>
                     Before founding Sosai Technologies, I spent two years in R&D
@@ -118,15 +98,10 @@ export default function AboutPage() {
 
             <FadeIn delay={0.1}>
               <div>
-                <p className="mb-4 font-mono text-xs uppercase tracking-widest text-accent">
-                  Experience
-                </p>
+                <p className="section-label mb-4">Experience</p>
                 <div className="space-y-6">
                   {experience.map((exp) => (
-                    <div
-                      key={exp.role}
-                      className="rounded-lg border border-border bg-surface/30 p-6"
-                    >
+                    <Card key={exp.role} hover={false} padding="sm">
                       <p className="font-mono text-xs text-zinc-600">
                         {exp.period}
                       </p>
@@ -135,65 +110,52 @@ export default function AboutPage() {
                       <p className="mt-3 text-sm leading-relaxed text-zinc-400">
                         {exp.description}
                       </p>
-                    </div>
+                    </Card>
                   ))}
                 </div>
 
-                <div className="mt-8 rounded-lg border border-border bg-surface/30 p-6">
-                  <p className="mb-4 font-mono text-xs uppercase tracking-widest text-zinc-600">
-                    Core Technologies
-                  </p>
+                <Card hover={false} padding="sm" className="mt-8">
+                  <p className="section-label mb-4">Core Technologies</p>
                   <div className="flex flex-wrap gap-2">
                     {techAreas.map((tech) => (
-                      <span
-                        key={tech}
-                        className="rounded-full border border-border px-3 py-1 font-mono text-xs text-zinc-500"
-                      >
-                        {tech}
-                      </span>
+                      <Badge key={tech}>{tech}</Badge>
                     ))}
                   </div>
-                </div>
+                </Card>
               </div>
             </FadeIn>
           </div>
         </div>
       </section>
 
-      {/* Values */}
       <section className="border-b border-border">
         <div className="mx-auto max-w-7xl px-6 py-24">
-          <FadeIn>
-            <p className="mb-3 font-mono text-xs uppercase tracking-widest text-accent">
-              How We Work
-            </p>
-            <h2 className="mb-16 text-3xl font-bold tracking-tight md:text-4xl">
-              Engineering principles, not sales pitches
-            </h2>
-          </FadeIn>
+          <SectionHeader
+            label="How We Work"
+            title="Engineering principles, not sales pitches"
+          />
 
           <StaggerContainer className="grid gap-4 md:grid-cols-2">
             {values.map((value) => (
               <StaggerItem key={value.title}>
-                <div className="rounded-lg border border-border bg-surface/30 p-8 transition-all hover:border-border-hover hover:bg-surface/60">
+                <Card>
                   <h3 className="mb-3 text-lg font-semibold">
                     {value.title}
                   </h3>
                   <p className="leading-relaxed text-zinc-400">
                     {value.description}
                   </p>
-                </div>
+                </Card>
               </StaggerItem>
             ))}
           </StaggerContainer>
         </div>
       </section>
 
-      {/* CTA */}
       <section>
         <div className="mx-auto max-w-7xl px-6 py-24">
           <FadeIn>
-            <div className="rounded-lg border border-border bg-surface/30 p-12 text-center md:p-20">
+            <Card hover={false} padding="lg" className="text-center">
               <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
                 Ready to build something serious?
               </h2>
@@ -202,14 +164,10 @@ export default function AboutPage() {
                 pitch — just an honest conversation about what you need and
                 whether we are the right fit.
               </p>
-              <Link
-                href="/contact"
-                className="mt-8 inline-flex items-center gap-2 rounded-md bg-accent px-8 py-3 font-mono text-sm font-medium text-primary transition-all hover:bg-accent/90 hover:shadow-lg hover:shadow-accent/20"
-              >
-                Start a Conversation
-                <span className="text-lg">&rarr;</span>
-              </Link>
-            </div>
+              <div className="mt-8">
+                <Button href="/contact">Start a Conversation</Button>
+              </div>
+            </Card>
           </FadeIn>
         </div>
       </section>

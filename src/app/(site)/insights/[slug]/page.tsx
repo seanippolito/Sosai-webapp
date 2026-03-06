@@ -1,11 +1,26 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import { FadeIn } from '@/components/motion/FadeIn'
+import { Badge } from '@/components/ui/Badge'
+import { Button } from '@/components/ui/Button'
+import { Card } from '@/components/ui/Card'
 import { getPayloadClient } from '@/lib/payload'
 import { RichText } from '@payloadcms/richtext-lexical/react'
-import type { User } from '@/payload-types'
+import type { User, Media } from '@/payload-types'
 
-// ─── Page ───────────────────────────────────────────────────────────────────
+export const revalidate = 60
+
+export async function generateStaticParams() {
+  const payload = await getPayloadClient()
+  const { docs } = await payload.find({
+    collection: 'posts',
+    where: { status: { equals: 'published' } },
+    limit: 100,
+    select: { slug: true },
+  })
+  return docs.map((doc) => ({ slug: doc.slug }))
+}
 
 export default async function PostPage({
   params,
@@ -37,10 +52,10 @@ export default async function PostPage({
       })
     : ''
   const author = (post.author as User)?.name || 'Sosai Technologies'
+  const coverImage = typeof post.coverImage === 'object' && post.coverImage !== null ? (post.coverImage as Media) : null
 
   return (
     <div>
-      {/* Header */}
       <section className="border-b border-border">
         <div className="mx-auto max-w-4xl px-6 pb-16 pt-20">
           <FadeIn>
@@ -92,7 +107,23 @@ export default async function PostPage({
         </div>
       </section>
 
-      {/* Content */}
+      {coverImage?.url && (
+        <FadeIn>
+          <div className="mx-auto max-w-4xl px-6 pt-12">
+            <div className="overflow-hidden rounded-lg border border-border">
+              <Image
+                src={coverImage.url}
+                alt={coverImage.alt || post.title}
+                width={coverImage.width || 1200}
+                height={coverImage.height || 600}
+                className="w-full object-cover"
+                priority
+              />
+            </div>
+          </div>
+        </FadeIn>
+      )}
+
       <article className="mx-auto max-w-4xl px-6 py-16">
         <FadeIn>
           <div className="prose prose-invert prose-zinc max-w-none prose-p:text-lg prose-p:leading-[1.8] prose-p:text-zinc-300">
@@ -100,42 +131,29 @@ export default async function PostPage({
           </div>
         </FadeIn>
 
-        {/* Tags */}
         <FadeIn>
           <div className="mt-16 border-t border-border pt-8">
-            <p className="mb-4 font-mono text-xs uppercase tracking-widest text-zinc-600">
-              Topics
-            </p>
+            <p className="section-label mb-4">Topics</p>
             <div className="flex flex-wrap gap-2">
               {tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="rounded-full border border-border px-4 py-1.5 font-mono text-xs text-zinc-500"
-                >
-                  {tag}
-                </span>
+                <Badge key={tag} className="px-4 py-1.5">{tag}</Badge>
               ))}
             </div>
           </div>
         </FadeIn>
 
-        {/* CTA */}
         <FadeIn>
-          <div className="mt-16 rounded-lg border border-border bg-surface/30 p-8 text-center">
+          <Card hover={false} className="mt-16 text-center">
             <h3 className="text-xl font-bold">
               Want to discuss this further?
             </h3>
             <p className="mt-2 text-zinc-400">
               We are always happy to talk through technical challenges.
             </p>
-            <Link
-              href="/contact"
-              className="mt-6 inline-flex items-center gap-2 rounded-md bg-accent px-6 py-3 font-mono text-sm font-medium text-primary transition-all hover:bg-accent/90"
-            >
-              Get in Touch
-              <span className="text-lg">&rarr;</span>
-            </Link>
-          </div>
+            <div className="mt-6">
+              <Button href="/contact">Get in Touch</Button>
+            </div>
+          </Card>
         </FadeIn>
       </article>
     </div>

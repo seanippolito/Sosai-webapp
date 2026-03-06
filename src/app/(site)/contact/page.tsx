@@ -1,8 +1,10 @@
 import { FadeIn } from '@/components/motion/FadeIn'
 import { ContactForm } from '@/components/forms/ContactForm'
+import { PageHeader } from '@/components/ui/PageHeader'
+import { Card } from '@/components/ui/Card'
 import { getPayloadClient } from '@/lib/payload'
 
-// ─── Page ───────────────────────────────────────────────────────────────────
+export const revalidate = 60
 
 export default async function ContactPage() {
   const payload = await getPayloadClient()
@@ -14,29 +16,12 @@ export default async function ContactPage() {
 
   return (
     <div>
-      {/* Header */}
-      <section className="border-b border-border">
-        <div className="mx-auto max-w-7xl px-6 pb-16 pt-20">
-          <FadeIn>
-            <p className="mb-3 font-mono text-xs uppercase tracking-widest text-accent">
-              Contact
-            </p>
-          </FadeIn>
-          <FadeIn delay={0.1}>
-            <h1 className="max-w-3xl text-4xl font-bold tracking-tight md:text-5xl">
-              Let&apos;s talk about your project
-            </h1>
-          </FadeIn>
-          <FadeIn delay={0.2}>
-            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-zinc-400">
-              Tell us what you are building. We will get back to you within one
-              business day with our thoughts on scope, approach, and timeline.
-            </p>
-          </FadeIn>
-        </div>
-      </section>
+      <PageHeader
+        label="Contact"
+        title="Let's talk about your project"
+        description="Tell us what you are building. We will get back to you within one business day with our thoughts on scope, approach, and timeline."
+      />
 
-      {/* Form */}
       <section className="mx-auto max-w-7xl px-6 py-24">
         <div className="grid gap-16 lg:grid-cols-[1fr,360px]">
           <FadeIn>
@@ -45,16 +30,11 @@ export default async function ContactPage() {
 
           <FadeIn delay={0.1}>
             <div className="space-y-8 lg:sticky lg:top-24 lg:self-start">
-              {/* Direct contact */}
-              <div className="rounded-lg border border-border bg-surface/30 p-8">
-                <p className="mb-6 font-mono text-xs uppercase tracking-widest text-zinc-600">
-                  Direct Contact
-                </p>
+              <Card hover={false}>
+                <p className="section-label mb-6">Direct Contact</p>
                 <div className="space-y-4">
                   <div>
-                    <p className="mb-1 font-mono text-xs text-zinc-600">
-                      Email
-                    </p>
+                    <p className="mb-1 font-mono text-xs text-zinc-600">Email</p>
                     <a
                       href={`mailto:${contactEmail}`}
                       className="text-sm text-zinc-300 transition-colors hover:text-accent"
@@ -63,29 +43,18 @@ export default async function ContactPage() {
                     </a>
                   </div>
                   <div>
-                    <p className="mb-1 font-mono text-xs text-zinc-600">
-                      Location
-                    </p>
-                    <p className="text-sm text-zinc-300">
-                      {location}
-                    </p>
+                    <p className="mb-1 font-mono text-xs text-zinc-600">Location</p>
+                    <p className="text-sm text-zinc-300">{location}</p>
                   </div>
                   <div>
-                    <p className="mb-1 font-mono text-xs text-zinc-600">
-                      Response Time
-                    </p>
-                    <p className="text-sm text-zinc-300">
-                      {responseTime}
-                    </p>
+                    <p className="mb-1 font-mono text-xs text-zinc-600">Response Time</p>
+                    <p className="text-sm text-zinc-300">{responseTime}</p>
                   </div>
                 </div>
-              </div>
+              </Card>
 
-              {/* What to expect */}
-              <div className="rounded-lg border border-border bg-surface/30 p-8">
-                <p className="mb-6 font-mono text-xs uppercase tracking-widest text-zinc-600">
-                  What Happens Next
-                </p>
+              <Card hover={false}>
+                <p className="section-label mb-6">What Happens Next</p>
                 <ol className="space-y-4">
                   {[
                     'We review your message and research your domain.',
@@ -100,7 +69,7 @@ export default async function ContactPage() {
                     </li>
                   ))}
                 </ol>
-              </div>
+              </Card>
             </div>
           </FadeIn>
         </div>

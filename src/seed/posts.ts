@@ -41,6 +41,11 @@ const posts = [
     readTime: '5 min read',
     status: 'published' as const,
     publishedDate: '2025-01-15',
+    meta: {
+      title: 'Sosai Technologies — Why Systems Integration Matters for Growing Businesses',
+      description:
+        'Most growing businesses run on a patchwork of disconnected tools. Systems integration eliminates the manual data transfer, reduces errors, and unlocks operational insights that siloed systems can never provide.',
+    },
   },
   {
     title: 'Cloud Architecture for Small Businesses: What Actually Matters',
@@ -62,6 +67,11 @@ const posts = [
     readTime: '6 min read',
     status: 'published' as const,
     publishedDate: '2025-02-01',
+    meta: {
+      title: 'Sosai Technologies — Cloud Architecture for Small Businesses: What Actually Matters',
+      description:
+        'Small businesses do not need the same cloud architecture as Netflix. Here is what actually matters when designing cloud infrastructure for organizations that need reliability without enterprise complexity.',
+    },
   },
 ]
 
